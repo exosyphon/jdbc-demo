@@ -43,6 +43,8 @@ class JdbcDemoApplication {
             conn.commit()
         } catch (e: Exception) {
             println(e.message)
+        } finally {
+            conn.autoCommit = true
         }
         val time2 = System.currentTimeMillis()
         println("finished : ${time2 - time} MS")
