@@ -19,7 +19,7 @@ class JdbcDemoApplication {
         val time = System.currentTimeMillis()
 //        val stringBuilder = StringBuilder()
 //        stringBuilder.append("INSERT INTO data (name, second_name) VALUES ")
-        val sql = "INSERT INTO data (name, second_name) VALUES (?, ?)"
+        val sql = "INSERT INTO data (name, second_name, third_name, fourth_name, fifth_name) VALUES (?, ?, ?, ?, ?)"
         val conn = jdbcTemplate.dataSource!!.connection
         conn.autoCommit = false
         val preparedStatement = conn.prepareStatement(sql)
@@ -29,7 +29,16 @@ class JdbcDemoApplication {
 //            }
             preparedStatement.setString(1, "$i")
             preparedStatement.setString(2, "name $i")
+            preparedStatement.setString(3, "other name $i")
+            preparedStatement.setString(4, "metaphysical ${i * 4}")
+            preparedStatement.setString(5, "something ${i * 19}")
             preparedStatement.addBatch()
+
+            if (i % 20_000 == 0) {
+                preparedStatement.executeBatch()
+                conn.commit()
+            }
+
 //            stringBuilder.append("($i, 'name $i') ")
         }
 //        stringBuilder.append(";")
